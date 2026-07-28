@@ -233,3 +233,85 @@ section{
 .contact a{
     color:#d4af37;
 }
+/* ================= FOOTER ================= */
+
+.footer{
+    background:#04160d;
+    color:#ffffff;
+    text-align:center;
+    padding:35px 20px;
+}
+
+.footer p{
+    margin:8px 0;
+    color:#cccccc;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width:992px){
+
+.about-grid{
+    grid-template-columns:1fr;
+}
+
+.hero h1{
+    font-size:48px;
+}
+
+.section-title{
+    font-size:34px;
+}
+
+}
+
+@media (max-width:768px){
+
+.navbar{
+    flex-direction:column;
+    gap:15px;
+}
+
+.nav-links{
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:18px;
+}
+
+.hero h1{
+    font-size:38px;
+}
+
+.hero p{
+    font-size:18px;
+}
+
+.btn{
+    padding:14px 28px;
+}
+
+section{
+    padding:70px 0;
+}
+
+}
+
+@media (max-width:480px){
+
+.logo h2{
+    font-size:20px;
+}
+
+.hero h1{
+    font-size:30px;
+}
+
+.hero p{
+    font-size:16px;
+}
+
+.section-title{
+    font-size:28px;
+}
+
+}
