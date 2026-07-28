@@ -315,3 +315,52 @@ section{
 }
 
 }
+/* ========= PREMIUM IMPROVEMENTS ========= */
+
+.hero{
+    text-align:center;
+}
+
+.hero-content{
+    animation:fadeUp 1s ease;
+}
+
+.product-card{
+    border:1px solid rgba(212,175,55,.25);
+}
+
+.product-card:hover{
+    box-shadow:0 25px 60px rgba(0,0,0,.18);
+}
+
+.btn{
+    box-shadow:0 10px 25px rgba(212,175,55,.35);
+}
+
+.btn:hover{
+    transform:translateY(-4px);
+}
+
+.section-title::after{
+    content:"";
+    display:block;
+    width:80px;
+    height:4px;
+    background:#d4af37;
+    margin:15px auto 0;
+    border-radius:10px;
+}
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
