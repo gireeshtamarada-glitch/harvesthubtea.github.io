@@ -23,3 +23,41 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+// Scroll Animation
+
+const revealElements = document.querySelectorAll(
+".about,.gallery,.contact,.hero"
+);
+
+window.addEventListener("scroll", reveal);
+
+function reveal(){
+
+const trigger = window.innerHeight * 0.85;
+
+revealElements.forEach(section=>{
+
+const top = section.getBoundingClientRect().top;
+
+if(top<trigger){
+
+section.style.opacity="1";
+section.style.transform="translateY(0)";
+
+}
+
+});
+
+}
+
+reveal();
+
+revealElements.forEach(section=>{
+
+section.style.opacity="0";
+
+section.style.transform="translateY(60px)";
+
+section.style.transition="all .8s ease";
+
+});
