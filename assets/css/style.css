@@ -410,3 +410,48 @@ transform:translateY(0);
 }
 
 }
+/* ==========================
+   PREMIUM ANIMATIONS
+========================== */
+
+.hero-image img,
+.about img,
+.product-card,
+.feature-box{
+    transition: all .4s ease;
+}
+
+.hero-image img:hover{
+    transform:scale(1.05);
+}
+
+.product-card:hover,
+.feature-box:hover{
+    transform:translateY(-10px);
+    box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+button,
+.btn{
+    transition:.3s;
+}
+
+button:hover,
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+section{
+    animation:fadeUp .8s ease;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
