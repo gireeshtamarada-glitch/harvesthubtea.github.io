@@ -117,20 +117,22 @@ header{
 }
 
 .btn{
-    display:inline-block;
-    padding:15px 35px;
-    background:#d4af37;
-    color:#082314;
-    font-weight:bold;
-    border-radius:50px;
-    transition:.3s;
+display:inline-block;
+padding:15px 35px;
+background:#c89b3c;
+color:#fff;
+text-decoration:none;
+border-radius:50px;
+font-weight:600;
+transition:.3s;
+box-shadow:0 10px 25px rgba(200,155,60,.35);
 }
 
 .btn:hover{
-    transform:translateY(-3px);
-    background:#f3cd55;
+background:#0b5d3d;
+transform:translateY(-4px);
+box-shadow:0 15px 40px rgba(11,93,61,.45);
 }
-
 /* ================= SECTION ================= */
 
 section{
