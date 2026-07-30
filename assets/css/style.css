@@ -63,6 +63,7 @@ header{
 
 .logo img{
     width:65px;
+    height:auto;
 }
 
 .logo h2{
@@ -90,16 +91,12 @@ header{
 /* ================= HERO ================= */
 
 .hero{
-    background:
-        linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
-        url("../images/hero-bg.jpg") center center/cover no-repeat;
-}
-}
     min-height:100vh;
     display:flex;
     align-items:center;
     background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url('../images/tea-bg.jpg') center/cover;
+    url('../images/Tea Background.png') center/cover no-repeat;
+    background-attachment: fixed;
     color:#fff;
     text-align:center;
     padding-top:90px;
@@ -113,31 +110,36 @@ header{
     font-size:64px;
     font-family:'Cinzel',serif;
     margin-bottom:20px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,.6);
 }
 
 .hero p{
     font-size:22px;
     max-width:700px;
     margin:0 auto 35px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,.5);
 }
 
 .btn{
-display:inline-block;
-padding:15px 35px;
-background:#c89b3c;
-color:#fff;
-text-decoration:none;
-border-radius:50px;
-font-weight:600;
-transition:.3s;
-box-shadow:0 10px 25px rgba(200,155,60,.35);
+    display:inline-block;
+    padding:15px 35px;
+    background:#c89b3c;
+    color:#fff;
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:600;
+    transition:.3s;
+    box-shadow:0 10px 25px rgba(200,155,60,.35);
+    border:none;
+    cursor:pointer;
 }
 
 .btn:hover{
-background:#0b5d3d;
-transform:translateY(-4px);
-box-shadow:0 15px 40px rgba(11,93,61,.45);
+    background:#0b5d3d;
+    transform:translateY(-4px);
+    box-shadow:0 15px 40px rgba(11,93,61,.45);
 }
+
 /* ================= SECTION ================= */
 
 section{
@@ -150,7 +152,19 @@ section{
     font-family:'Cinzel',serif;
     color:#0b3f23;
     margin-bottom:50px;
+    position:relative;
 }
+
+.section-title::after{
+    content:"";
+    display:block;
+    width:80px;
+    height:4px;
+    background:#d4af37;
+    margin:15px auto 0;
+    border-radius:10px;
+}
+
 /* ================= ABOUT ================= */
 
 .about{
@@ -168,6 +182,12 @@ section{
     width:100%;
     border-radius:20px;
     box-shadow:0 20px 50px rgba(0,0,0,.15);
+    transition: all .4s ease;
+}
+
+.about img:hover{
+    transform:scale(1.05);
+    box-shadow:0 25px 60px rgba(0,0,0,.25);
 }
 
 .about h3{
@@ -185,7 +205,7 @@ section{
 /* ================= PRODUCTS ================= */
 
 .products{
-    background:#f5f3eb;
+    background:linear-gradient(135deg, #f5f3eb 0%, #ffffff 100%);
 }
 
 .product-grid{
@@ -200,10 +220,12 @@ section{
     overflow:hidden;
     box-shadow:0 10px 30px rgba(0,0,0,.08);
     transition:.35s;
+    border:1px solid rgba(212,175,55,.25);
 }
 
 .product-card:hover{
     transform:translateY(-10px);
+    box-shadow:0 25px 60px rgba(0,0,0,.18);
 }
 
 .product-card img{
@@ -223,14 +245,104 @@ section{
 
 .product-info p{
     color:#666;
+    margin-bottom:20px;
+}
+
+/* ================= GALLERY ================= */
+
+.gallery{
+    padding:80px 0;
+    background:#fff;
+    background-image:url('../images/Tea Leaf.png');
+    background-size:300px;
+    background-repeat:no-repeat;
+    background-position:top right;
+    background-attachment:fixed;
+    position:relative;
+}
+
+.gallery::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:rgba(255,255,255,.85);
+    pointer-events:none;
+}
+
+.gallery .container{
+    position:relative;
+    z-index:1;
+}
+
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:30px;
+    margin-top:40px;
+}
+
+.gallery-card{
+    background:#f8f8f8;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    transition:.3s;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.gallery-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+.gallery-card img{
+    width:180px;
+    margin:auto;
+    display:block;
+}
+
+.gallery-card h3{
+    margin:20px 0 10px;
+    color:#0b5d3d;
+    font-family:'Cinzel',serif;
+}
+
+.gallery-card p{
+    font-size:15px;
+    color:#666;
 }
 
 /* ================= CONTACT ================= */
 
 .contact{
-    background:#082314;
+    background:linear-gradient(135deg, #082314 0%, #0b3f23 100%);
     color:#fff;
     text-align:center;
+    background-image:url('../images/Tea Leaf.png');
+    background-size:250px;
+    background-repeat:no-repeat;
+    background-position:bottom left;
+    background-attachment:fixed;
+    position:relative;
+}
+
+.contact::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:rgba(8,35,20,.75);
+    pointer-events:none;
+}
+
+.contact .container{
+    position:relative;
+    z-index:1;
 }
 
 .contact p{
@@ -239,7 +351,14 @@ section{
 
 .contact a{
     color:#d4af37;
+    font-weight:600;
+    transition:.3s;
 }
+
+.contact a:hover{
+    text-decoration:underline;
+}
+
 /* ================= FOOTER ================= */
 
 .footer{
@@ -254,142 +373,28 @@ section{
     color:#cccccc;
 }
 
-/* ================= RESPONSIVE ================= */
-
-@media (max-width:992px){
-
-.about-grid{
-    grid-template-columns:1fr;
-}
-
-.hero h1{
-    font-size:48px;
-}
-
-.section-title{
-    font-size:34px;
-}
-
-}
-
-@media (max-width:768px){
-
-.navbar{
-    flex-direction:column;
-    gap:15px;
-}
-
-.nav-links{
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:18px;
-}
-
-.hero h1{
-    font-size:38px;
-}
-
-.hero p{
-    font-size:18px;
-}
-
-.btn{
-    padding:14px 28px;
-}
-
-section{
-    padding:70px 0;
-}
-
-}
-
-@media (max-width:480px){
-
-.logo h2{
-    font-size:20px;
-}
-
-.hero h1{
-    font-size:30px;
-}
-
-.hero p{
-    font-size:16px;
-}
-
-.section-title{
-    font-size:28px;
-}
-
-}
-/* ========= PREMIUM IMPROVEMENTS ========= */
-
-.hero{
-    text-align:center;
-}
+/* ================= PREMIUM ANIMATIONS ================= */
 
 .hero-content{
     animation:fadeUp 1s ease;
 }
 
-.product-card{
-    border:1px solid rgba(212,175,55,.25);
-}
-
-.product-card:hover{
-    box-shadow:0 25px 60px rgba(0,0,0,.18);
-}
-
-.btn{
-    box-shadow:0 10px 25px rgba(212,175,55,.35);
-}
-
-.btn:hover{
-    transform:translateY(-4px);
-}
-
-.section-title::after{
-    content:"";
-    display:block;
-    width:80px;
-    height:4px;
-    background:#d4af37;
-    margin:15px auto 0;
-    border-radius:10px;
-}
-
 @keyframes fadeUp{
-
-from{
-opacity:0;
-transform:translateY(40px);
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
-to{
-opacity:1;
-   .whatsapp-float{
-    position:fixed;
-    bottom:25px;
-    right:25px;
-    width:65px;
-    height:65px;
-    background:#25D366;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:30px;
-    color:#fff;
-    text-decoration:none;
-    box-shadow:0 15px 40px rgba(0,0,0,.25);
-    z-index:999;
-    transition:.3s;
+section{
+    animation:fadeUp .8s ease;
 }
 
-.whatsapp-float:hover{
-    transform:scale(1.1);
-}
-   /* Floating WhatsApp Button */
+/* Floating WhatsApp Button */
 .whatsapp-float{
     position:fixed;
     bottom:25px;
@@ -413,94 +418,89 @@ opacity:1;
     transform:scale(1.1);
     box-shadow:0 12px 28px rgba(0,0,0,0.35);
 }
-transform:translateY(0);
-}
 
-}
-/* ==========================
-   PREMIUM ANIMATIONS
-========================== */
+/* ================= RESPONSIVE ================= */
 
-.hero-image img,
-.about img,
-.product-card,
-.feature-box{
-    transition: all .4s ease;
-}
+@media (max-width:992px){
 
-.hero-image img:hover{
-    transform:scale(1.05);
-}
-
-.product-card:hover,
-.feature-box:hover{
-    transform:translateY(-10px);
-    box-shadow:0 20px 40px rgba(0,0,0,.15);
-}
-
-button,
-.btn{
-    transition:.3s;
-}
-
-button:hover,
-.btn:hover{
-    transform:translateY(-3px);
-}
-
-section{
-    animation:fadeUp .8s ease;
-}
-
-@keyframes fadeUp{
-    from{
-        opacity:0;
-        transform:translateY(30px);
+    .about-grid{
+        grid-template-columns:1fr;
     }
-    to{
-        opacity:1;
-        transform:translateY(0);
+
+    .hero h1{
+        font-size:48px;
     }
-}
-/* Gallery */
 
-.gallery{
-padding:80px 0;
-background:#fff;
-}
+    .section-title{
+        font-size:34px;
+    }
 
-.gallery-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
-margin-top:40px;
 }
 
-.gallery-card{
-background:#f8f8f8;
-padding:20px;
-border-radius:15px;
-text-align:center;
-transition:.3s;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
+@media (max-width:768px){
+
+    .navbar{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .nav-links{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:18px;
+    }
+
+    .hero h1{
+        font-size:38px;
+    }
+
+    .hero p{
+        font-size:18px;
+    }
+
+    .btn{
+        padding:14px 28px;
+    }
+
+    section{
+        padding:70px 0;
+    }
+
+    .gallery{
+        background-size:200px;
+    }
+
 }
 
-.gallery-card:hover{
-transform:translateY(-8px);
-}
+@media (max-width:480px){
 
-.gallery-card img{
-width:180px;
-margin:auto;
-display:block;
-}
+    .logo h2{
+        font-size:20px;
+    }
 
-.gallery-card h3{
-margin:20px 0 10px;
-color:#0b5d3d;
-}
+    .logo img{
+        width:50px;
+    }
 
-.gallery-card p{
-font-size:15px;
-color:#666;
+    .hero h1{
+        font-size:30px;
+    }
+
+    .hero p{
+        font-size:16px;
+    }
+
+    .section-title{
+        font-size:28px;
+    }
+
+    .about-grid{
+        gap:30px;
+    }
+
+    .nav-links{
+        gap:15px;
+        font-size:14px;
+    }
+
 }
