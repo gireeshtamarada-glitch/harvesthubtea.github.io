@@ -31,7 +31,7 @@
 <li><a href="#contact">Contact</a></li>
 </ul>
 
-<a href="https://wa.me/918839745150" class="btn">Order Now</a>
+<a href="#products" class="btn">Order Now</a>
 
 </div>
 
@@ -96,7 +96,7 @@ We carefully select and process the finest tea leaves to preserve their natural 
 
 <div class="container">
 
-<h2 class="section-title">Our Premium Product</h2>
+<h2 class="section-title">Our Premium Products</h2>
 
 <div class="product-grid">
 
@@ -106,14 +106,69 @@ We carefully select and process the finest tea leaves to preserve their natural 
 
 <div class="product-info">
 
-<h3>Harvest Hub Assam Tea</h3>
+<h3>Harvest Hub Assam Tea - 250g</h3>
 
-<p>
+<p class="product-description">
 Premium Assam Tea with a rich aroma, bold flavour and refreshing taste. Carefully sourced from the lush tea gardens of Assam.
 </p>
 
-<a class="btn" href="https://wa.me/918839745150">
-Order on WhatsApp
+<div class="product-details">
+<p class="price">₹599</p>
+<p class="stock">In Stock</p>
+</div>
+
+<a class="btn add-to-cart" href="#" data-product="Harvest Hub Assam Tea 250g" data-price="599">
+Add to Cart
+</a>
+
+</div>
+
+</div>
+
+<div class="product-card">
+
+<img src="assets/images/Tea Pouch.png" alt="Harvest Hub Assam Tea">
+
+<div class="product-info">
+
+<h3>Harvest Hub Assam Tea - 500g</h3>
+
+<p class="product-description">
+Premium Assam Tea with a rich aroma, bold flavour and refreshing taste. Carefully sourced from the lush tea gardens of Assam.
+</p>
+
+<div class="product-details">
+<p class="price">₹1,099</p>
+<p class="stock">In Stock</p>
+</div>
+
+<a class="btn add-to-cart" href="#" data-product="Harvest Hub Assam Tea 500g" data-price="1099">
+Add to Cart
+</a>
+
+</div>
+
+</div>
+
+<div class="product-card">
+
+<img src="assets/images/Tea Pouch.png" alt="Harvest Hub Assam Tea">
+
+<div class="product-info">
+
+<h3>Harvest Hub Assam Tea - 1kg</h3>
+
+<p class="product-description">
+Premium Assam Tea with a rich aroma, bold flavour and refreshing taste. Carefully sourced from the lush tea gardens of Assam.
+</p>
+
+<div class="product-details">
+<p class="price">₹1,999</p>
+<p class="stock">In Stock</p>
+</div>
+
+<a class="btn add-to-cart" href="#" data-product="Harvest Hub Assam Tea 1kg" data-price="1999">
+Add to Cart
 </a>
 
 </div>
@@ -197,6 +252,85 @@ Our premium Assam tea is carefully sourced from the lush tea gardens of Assam to
 
 </section>
 
+<!-- Shopping Cart Modal -->
+<div id="cartModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Shopping Cart</h2>
+    <div id="cartItems"></div>
+    <div class="cart-summary">
+      <h3>Total: ₹<span id="cartTotal">0</span></h3>
+    </div>
+    <button class="btn btn-checkout" id="checkoutBtn">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div id="checkoutModal" class="modal">
+  <div class="modal-content checkout-modal">
+    <span class="close">&times;</span>
+    <h2>Checkout</h2>
+    <form id="checkoutForm">
+      <div class="form-group">
+        <label for="name">Full Name *</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number *</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Delivery Address *</label>
+        <textarea id="address" name="address" rows="3" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="city">City *</label>
+        <input type="text" id="city" name="city" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="state">State *</label>
+          <input type="text" id="state" name="state" required>
+        </div>
+
+        <div class="form-group">
+          <label for="pincode">Pincode *</label>
+          <input type="text" id="pincode" name="pincode" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="paymentMethod">Payment Method *</label>
+        <select id="paymentMethod" name="paymentMethod" required>
+          <option value="">Select Payment Method</option>
+          <option value="creditCard">Credit Card</option>
+          <option value="debitCard">Debit Card</option>
+          <option value="upi">UPI</option>
+          <option value="netBanking">Net Banking</option>
+          <option value="cod">Cash on Delivery</option>
+        </select>
+      </div>
+
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div id="summaryItems"></div>
+        <h3>Total Amount: ₹<span id="summaryTotal">0</span></h3>
+      </div>
+
+      <button type="submit" class="btn btn-submit">Place Order</button>
+    </form>
+  </div>
+</div>
+
 <section class="contact" id="contact">
 
 <div class="container">
@@ -209,9 +343,11 @@ Our premium Assam tea is carefully sourced from the lush tea gardens of Assam to
 
 <p>📞 +91 88397 45150</p>
 
+<p>📧 info@harvesthubtea.com</p>
+
 <p>
-<a href="https://wa.me/918839745150">
-Chat on WhatsApp
+<a href="https://wa.me/918839745150" target="_blank">
+💬 Chat on WhatsApp
 </a>
 </p>
 
@@ -220,14 +356,6 @@ Chat on WhatsApp
 </section>
 
 <footer class="footer">
-    <a class="whatsapp-float"
-href="https://wa.me/918839745150"
-target="_blank"
-aria-label="Chat on WhatsApp">
-
-💬
-
-</a>
 
 <div class="container">
 
