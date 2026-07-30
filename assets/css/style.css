@@ -90,6 +90,11 @@ header{
 /* ================= HERO ================= */
 
 .hero{
+    background:
+        linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+        url("../images/hero-bg.jpg") center center/cover no-repeat;
+}
+}
     min-height:100vh;
     display:flex;
     align-items:center;
