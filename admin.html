@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Harvest Hub Assam Tea</title>
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Harvest Hub Admin</h2>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="#" class="menu-item active" data-section="dashboard">
+                📊 Dashboard
+            </a>
+            <a href="#" class="menu-item" data-section="orders">
+                📦 Orders
+            </a>
+            <a href="#" class="menu-item" data-section="products">
+                🍵 Products
+            </a>
+            <a href="#" class="menu-item" data-section="settings">
+                ⚙️ Settings
+            </a>
+            <a href="index.html" class="menu-item logout">
+                🚪 Back to Store
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="admin-header">
+            <h1>Harvest Hub Admin Dashboard</h1>
+            <div class="header-info">
+                <span id="dateTime"></span>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <h2>Dashboard Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total Orders</p>
+                        <p class="stat-value" id="totalOrders">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total Revenue</p>
+                        <p class="stat-value" id="totalRevenue">₹0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Completed</p>
+                        <p class="stat-value" id="completedOrders">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-content">
+                        <p class="stat-label">Pending</p>
+                        <p class="stat-value" id="pendingOrders">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-orders">
+                <h3>Recent Orders</h3>
+                <div id="recentOrdersList"></div>
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders" class="content-section">
+            <div class="orders-header">
+                <h2>All Orders</h2>
+                <div class="filter-controls">
+                    <select id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <input type="text" id="searchOrder" placeholder="Search by Order ID or Email">
+                </div>
+            </div>
+
+            <div class="orders-table-container">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="7" class="empty-message">No orders yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Order Details Modal -->
+        <div id="orderDetailModal" class="modal">
+            <div class="modal-content order-detail-modal">
+                <span class="close">&times;</span>
+                <h2>Order Details</h2>
+                <div id="orderDetailContent"></div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <section id="products" class="content-section">
+            <h2>Products Management</h2>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be populated here -->
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="content-section">
+            <h2>Settings</h2>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label>Store Email</label>
+                    <input type="email" id="storeEmail" placeholder="admin@harvesthubtea.com">
+                </div>
+                <div class="form-group">
+                    <label>Store Phone</label>
+                    <input type="tel" id="storePhone" placeholder="+91 88397 45150">
+                </div>
+                <div class="form-group">
+                    <label>Shipping Address</label>
+                    <textarea id="shippingAddress" placeholder="Your store address"></textarea>
+                </div>
+                <button class="btn btn-save" onclick="saveSettings()">Save Settings</button>
+                <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="assets/js/admin.js"></script>
+
+</body>
+</html>
