@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking | Harvest Hub Assam Tea</title>
+    <link rel="stylesheet" href="assets/css/tracking.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="tracking-container">
+    <!-- Header -->
+    <header class="tracking-header">
+        <div class="header-content">
+            <h1>🍵 Harvest Hub Order Tracking</h1>
+            <p>Track your tea order status in real-time</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="tracking-main">
+        <div class="tracking-box">
+            <div class="search-section">
+                <h2>Track Your Order</h2>
+                <p>Enter your Order ID to see the latest status</p>
+                
+                <div class="search-form">
+                    <input 
+                        type="text" 
+                        id="orderIdInput" 
+                        placeholder="Enter Order ID (e.g., HH1234567890ABC)"
+                        class="order-id-input"
+                    >
+                    <button onclick="searchOrder()" class="search-btn">Track Order</button>
+                </div>
+
+                <div class="search-methods">
+                    <p>Or search by:</p>
+                    <input 
+                        type="email" 
+                        id="emailInput" 
+                        placeholder="Your Email Address"
+                        class="search-input"
+                    >
+                    <button onclick="searchByEmail()" class="search-btn-secondary">Search by Email</button>
+                </div>
+            </div>
+
+            <!-- Order Status Display -->
+            <div id="orderStatusContainer" class="order-status-container" style="display: none;">
+                <div class="status-header">
+                    <h2 id="orderTitle">Order Details</h2>
+                    <button onclick="resetTracking()" class="btn-reset">Search Another Order</button>
+                </div>
+
+                <!-- Order Information -->
+                <div class="order-info-card">
+                    <div class="info-row">
+                        <span class="label">Order ID:</span>
+                        <span class="value" id="displayOrderId"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Customer Name:</span>
+                        <span class="value" id="displayName"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Order Date:</span>
+                        <span class="value" id="displayDate"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Total Amount:</span>
+                        <span class="value amount" id="displayAmount"></span>
+                    </div>
+                </div>
+
+                <!-- Status Timeline -->
+                <div class="status-timeline">
+                    <h3>Order Status Timeline</h3>
+                    <div class="timeline">
+                        <div class="timeline-item" id="timeline-pending">
+                            <div class="timeline-dot pending-dot"></div>
+                            <div class="timeline-content">
+                                <h4>Order Placed</h4>
+                                <p id="time-pending"></p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item" id="timeline-confirmed">
+                            <div class="timeline-dot confirmed-dot"></div>
+                            <div class="timeline-content">
+                                <h4>Order Confirmed</h4>
+                                <p id="time-confirmed"></p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item" id="timeline-shipped">
+                            <div class="timeline-dot shipped-dot"></div>
+                            <div class="timeline-content">
+                                <h4>Order Shipped</h4>
+                                <p id="time-shipped"></p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item" id="timeline-delivered">
+                            <div class="timeline-dot delivered-dot"></div>
+                            <div class="timeline-content">
+                                <h4>Delivered</h4>
+                                <p id="time-delivered"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Address -->
+                <div class="delivery-info">
+                    <h3>Delivery Address</h3>
+                    <div class="address-card">
+                        <p id="displayAddress"></p>
+                        <p id="displayCity"></p>
+                        <p id="displayContact"></p>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="order-items-section">
+                    <h3>Order Items</h3>
+                    <div class="items-list" id="orderItemsList"></div>
+                </div>
+
+                <!-- Current Status Badge -->
+                <div class="status-badge-container">
+                    <p class="status-label">Current Status:</p>
+                    <div class="status-badge" id="currentStatusBadge"></div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="notifications-section">
+                    <h3>📧 Email Notifications</h3>
+                    <div class="notification-info">
+                        <p>Status updates will be sent to:</p>
+                        <p class="email-display" id="displayEmail"></p>
+                        <label>
+                            <input type="checkbox" id="emailNotifCheckbox" checked>
+                            <span>Receive email notifications for order updates</span>
+                        </label>
+                        <button onclick="updateNotificationPreference()" class="btn-save">Save Preference</button>
+                    </div>
+                </div>
+
+                <!-- Estimate -->
+                <div class="delivery-estimate">
+                    <h3>📦 Delivery Estimate</h3>
+                    <p id="estimateText"></p>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorContainer" class="error-container" style="display: none;">
+                <h3>❌ Order Not Found</h3>
+                <p id="errorMessage"></p>
+                <button onclick="resetTracking()" class="btn-reset">Try Again</button>
+            </div>
+
+            <!-- Recent Orders (Demo) -->
+            <div class="demo-section">
+                <h3>Demo Orders (Sample Data)</h3>
+                <p>Click on any order below to see tracking details:</p>
+                <div class="demo-orders" id="demoOrdersList"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="tracking-footer">
+        <p>Need help? <a href="index.html#contact">Contact Us</a></p>
+        <p>© 2026 Harvest Hub Assam Tea. All rights reserved.</p>
+    </footer>
+</div>
+
+<script src="assets/js/tracking.js"></script>
+
+</body>
+</html>
