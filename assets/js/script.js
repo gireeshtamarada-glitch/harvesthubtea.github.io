@@ -337,7 +337,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
         const target = document.querySelector(href);
 
-        if (target) {
+                if (target) {
             e.preventDefault();
 
             target.scrollIntoView({
@@ -346,8 +346,4 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
 
     });
-});
-    }
-
-});
 });
