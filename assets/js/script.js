@@ -326,17 +326,11 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Smooth scroll for links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-
-        const href = this.getAttribute('href');
-
-        if (href === "#") {
-            return;
-        }
-
         e.preventDefault();
 
+        const href = this.getAttribute('href');
         const target = document.querySelector(href);
 
         if (target) {
@@ -344,6 +338,5 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: "smooth"
             });
         }
-
     });
 });
