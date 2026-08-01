@@ -326,17 +326,23 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Smooth scroll for links
-document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
 
         const href = this.getAttribute('href');
+
+        if (!href || href === "#") {
+            return;
+        }
+
         const target = document.querySelector(href);
 
         if (target) {
+            e.preventDefault();
             target.scrollIntoView({
                 behavior: "smooth"
             });
         }
+
     });
 });
