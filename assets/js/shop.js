@@ -107,7 +107,7 @@ class OrderManager {
     constructor() {
         this.orders = this.loadOrders();
         this.googleAppsScriptUrl = 'https://script.google.com/macros/d/YOUR_GOOGLE_APPS_SCRIPT_DEPLOYMENT_ID/usercallable';
-        this.adminEmail = 'gireeshtamarada@gmail.com';
+        this.adminEmail = 'harvesthubassamtea@gmail.com';
     }
 
     loadOrders() {
@@ -266,7 +266,7 @@ class CheckoutHandler {
         try {
             const adminEmailData = {
                 to_email: this.orderManager.adminEmail,
-                to_name: 'Admin',
+                to_name: 'Harvest Hub Admin',
                 subject: `New Order - ${order.orderId}`,
                 order_id: order.orderId,
                 customer_name: order.customerName,
