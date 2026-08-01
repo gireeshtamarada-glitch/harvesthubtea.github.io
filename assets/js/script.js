@@ -227,7 +227,7 @@ function saveOrder(orderData) {
         console.log("Order sent successfully");
     })
     .catch(error => {
-        console.error("Error saving order:", error);
+        console.error("Error sending order:", error);
     });
 
 }
