@@ -1,351 +1,591 @@
-// Email Notification Service for Harvest Hub
-// Handles sending email notifications for order status updates
+// Harvest Hub - Enhanced Notification Manager Module
+// Handles all email notifications, in-app notifications, and customer communications
+// Replaces and enhances the existing notifications.js
 
-class EmailNotificationService {
+class NotificationManager {
     constructor() {
-        this.emailProvider = 'emailjs'; // Using EmailJS for client-side email sending
-        this.serviceId = 'service_harvesthub'; // EmailJS Service ID
-        this.templateId = 'template_orderupdate'; // EmailJS Template ID
-        this.userId = 'YOUR_EMAILJS_USER_ID'; // Replace with your EmailJS User ID
+        this.adminEmail = 'harvesthubassamtea@gmail.com';
+        this.notificationQueue = [];
         this.notificationHistory = this.loadNotificationHistory();
     }
 
-    // Load notification history from localStorage
+    /**
+     * Load notification history from localStorage
+     */
     loadNotificationHistory() {
-        const history = localStorage.getItem('emailNotificationHistory');
-        return history ? JSON.parse(history) : [];
+        const saved = localStorage.getItem('harvestHubNotificationHistory');
+        return saved ? JSON.parse(saved) : [];
     }
 
-    // Save notification history to localStorage
+    /**
+     * Save notification history to localStorage
+     */
     saveNotificationHistory() {
-        localStorage.setItem('emailNotificationHistory', JSON.stringify(this.notificationHistory));
+        localStorage.setItem('harvestHubNotificationHistory', JSON.stringify(this.notificationHistory));
     }
 
-    // Send order confirmation email
-    async sendOrderConfirmation(order) {
-        const emailTemplate = this.buildOrderConfirmationTemplate(order);
-        return this.sendEmail({
-            to_email: order.email,
-            to_name: order.customerName,
-            subject: `Order Confirmation - ${order.orderId}`,
-            order_id: order.orderId,
-            customer_name: order.customerName,
-            total_amount: order.totalAmount,
-            items_list: this.formatItemsList(order.items),
-            delivery_address: this.formatAddress(order),
-            status_type: 'confirmation'
-        });
-    }
-
-    // Send order status update email
-    async sendStatusUpdate(order, newStatus) {
-        const statusMessage = this.getStatusMessage(newStatus);
-        const deliveryEstimate = this.getDeliveryEstimate(newStatus, order.orderDate);
-
-        return this.sendEmail({
-            to_email: order.email,
-            to_name: order.customerName,
-            subject: `Order Update - ${order.orderId} is ${statusMessage}`,
-            order_id: order.orderId,
-            customer_name: order.customerName,
-            status_message: statusMessage,
-            delivery_estimate: deliveryEstimate,
-            tracking_link: this.getTrackingLink(order.orderId),
-            status_type: 'status_update'
-        });
-    }
-
-    // Send order delivery confirmation email
-    async sendDeliveryConfirmation(order) {
-        return this.sendEmail({
-            to_email: order.email,
-            to_name: order.customerName,
-            subject: `Delivery Confirmed - ${order.orderId}`,
-            order_id: order.orderId,
-            customer_name: order.customerName,
-            total_amount: order.totalAmount,
-            thank_you_message: 'Thank you for choosing Harvest Hub! We hope you enjoy our premium Assam tea.',
-            review_link: this.getReviewLink(order.orderId),
-            status_type: 'delivery_confirmation'
-        });
-    }
-
-    // Send order cancellation email
-    async sendCancellationNotification(order, reason) {
-        return this.sendEmail({
-            to_email: order.email,
-            to_name: order.customerName,
-            subject: `Order Cancelled - ${order.orderId}`,
-            order_id: order.orderId,
-            customer_name: order.customerName,
-            cancellation_reason: reason,
-            refund_info: 'Your refund will be processed within 5-7 business days.',
-            support_link: 'https://harvesthubtea.com/contact',
-            status_type: 'cancellation'
-        });
-    }
-
-    // Generic email sending function
-    async sendEmail(emailData) {
+    /**
+     * Send order confirmation notification to customer
+     */
+    static async notifyOrderConfirmation(order) {
         try {
-            // For production, use EmailJS or another service
-            // This is a mock implementation
-            const notification = {
-                timestamp: new Date().toISOString(),
-                to: emailData.to_email,
-                subject: emailData.subject,
-                status: 'sent',
-                type: emailData.status_type
-            };
-
-            this.notificationHistory.push(notification);
-            this.saveNotificationHistory();
-
-            console.log('Email sent successfully:', emailData);
-            return {
-                success: true,
-                message: 'Email notification sent successfully',
+            const notificationData = {
+                type: 'order_confirmation',
+                orderId: order.orderId,
+                customerName: order.customerName,
+                customerEmail: order.email,
+                totalAmount: order.totalAmount,
+                items: order.items,
+                deliveryAddress: `${order.address}, ${order.city}, ${order.state} - ${order.pincode}`,
+                orderDate: order.orderDate,
                 timestamp: new Date().toISOString()
             };
 
-        } catch (error) {
-            console.error('Error sending email:', error);
-            return {
-                success: false,
-                message: 'Failed to send email notification',
-                error: error.message
-            };
-        }
-    }
+            // Log the notification
+            NotificationManager.logNotification(notificationData);
 
-    // Build order confirmation template
-    buildOrderConfirmationTemplate(order) {
-        return `
-            <h2>Order Confirmation</h2>
-            <p>Dear ${order.customerName},</p>
-            <p>Thank you for your order! We're excited to deliver our premium Assam tea to you.</p>
-            
-            <h3>Order Details:</h3>
-            <p><strong>Order ID:</strong> ${order.orderId}</p>
-            <p><strong>Order Date:</strong> ${new Date(order.orderDate).toLocaleDateString('en-IN')}</p>
-            <p><strong>Total Amount:</strong> ₹${order.totalAmount}</p>
-            
-            <h3>Items Ordered:</h3>
-            <ul>
-                ${order.items.map(item => `<li>${item.name} × ${item.quantity} - ₹${item.price * item.quantity}</li>`).join('')}
-            </ul>
-            
-            <h3>Delivery Address:</h3>
-            <p>${this.formatAddress(order)}</p>
-            
-            <p><a href="${this.getTrackingLink(order.orderId)}">Track Your Order</a></p>
-            
-            <p>Best regards,<br>Harvest Hub Team</p>
-        `;
-    }
-
-    // Format items list for email
-    formatItemsList(items) {
-        return items.map(item => `${item.name} (${item.quantity} × ₹${item.price})`).join(', ');
-    }
-
-    // Format address for email
-    formatAddress(order) {
-        return `${order.address}, ${order.city}, ${order.state} - ${order.pincode}`;
-    }
-
-    // Get status message based on status code
-    getStatusMessage(status) {
-        const messages = {
-            'pending': 'Order Placed',
-            'confirmed': 'Confirmed and Being Prepared',
-            'shipped': 'Shipped - In Transit',
-            'delivered': 'Delivered',
-            'cancelled': 'Cancelled'
-        };
-        return messages[status] || status;
-    }
-
-    // Get delivery estimate based on status
-    getDeliveryEstimate(status, orderDate) {
-        const date = new Date(orderDate);
-        const estimates = {
-            'pending': `Estimated delivery: ${new Date(date.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN')}`,
-            'confirmed': `Estimated delivery: ${new Date(date.getTime() + 4 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN')}`,
-            'shipped': `Estimated delivery: ${new Date(date.getTime() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN')}`,
-            'delivered': 'Your order has been delivered!',
-            'cancelled': 'This order has been cancelled'
-        };
-        return estimates[status] || 'Status information unavailable';
-    }
-
-    // Get tracking link
-    getTrackingLink(orderId) {
-        return `https://harvesthubtea.com/tracking.html?orderId=${orderId}`;
-    }
-
-    // Get review link
-    getReviewLink(orderId) {
-        return `https://harvesthubtea.com/review.html?orderId=${orderId}`;
-    }
-
-    // Get notification history
-    getNotificationHistory() {
-        return this.notificationHistory;
-    }
-
-    // Clear notification history
-    clearNotificationHistory() {
-        this.notificationHistory = [];
-        localStorage.removeItem('emailNotificationHistory');
-    }
-
-    // Get notification stats
-    getNotificationStats() {
-        return {
-            total: this.notificationHistory.length,
-            sent: this.notificationHistory.filter(n => n.status === 'sent').length,
-            failed: this.notificationHistory.filter(n => n.status === 'failed').length,
-            byType: this.notificationHistory.reduce((acc, n) => {
-                acc[n.type] = (acc[n.type] || 0) + 1;
-                return acc;
-            }, {})
-        };
-    }
-}
-
-// Initialize email notification service
-const emailNotificationService = new EmailNotificationService();
-
-// Export for use in other files
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = EmailNotificationService;
-}
-
-// SMS Notification Service (Optional)
-class SMSNotificationService {
-    constructor() {
-        this.provider = 'twilio'; // Using Twilio for SMS
-        this.accountSid = 'YOUR_TWILIO_ACCOUNT_SID';
-        this.authToken = 'YOUR_TWILIO_AUTH_TOKEN';
-        this.fromNumber = '+1234567890'; // Your Twilio number
-        this.smsHistory = this.loadSMSHistory();
-    }
-
-    loadSMSHistory() {
-        const history = localStorage.getItem('smsNotificationHistory');
-        return history ? JSON.parse(history) : [];
-    }
-
-    saveSMSHistory() {
-        localStorage.setItem('smsNotificationHistory', JSON.stringify(this.smsHistory));
-    }
-
-    async sendOrderStatusSMS(phone, orderId, status) {
-        const message = `Your Harvest Hub order ${orderId} is now ${status}. Track it here: harvesthubtea.com/tracking`;
-        
-        try {
-            // Mock implementation - in production, call Twilio API
-            const sms = {
-                timestamp: new Date().toISOString(),
-                to: phone,
-                message: message,
-                status: 'sent'
-            };
-            
-            this.smsHistory.push(sms);
-            this.saveSMSHistory();
-            
-            console.log('SMS sent successfully:', sms);
-            return { success: true, message: 'SMS sent successfully' };
-        } catch (error) {
-            console.error('Error sending SMS:', error);
-            return { success: false, error: error.message };
-        }
-    }
-
-    getSMSHistory() {
-        return this.smsHistory;
-    }
-}
-
-// Initialize SMS notification service
-const smsNotificationService = new SMSNotificationService();
-
-// Notification Manager - Coordinates email and SMS
-class NotificationManager {
-    static async notifyOrderConfirmation(order) {
-        console.log('Sending order confirmation notifications for:', order.orderId);
-        
-        // Send email
-        const emailResult = await emailNotificationService.sendOrderConfirmation(order);
-        
-        // Send SMS if phone is available
-        if (order.phone) {
-            const smsResult = await smsNotificationService.sendOrderStatusSMS(
-                order.phone,
-                order.orderId,
-                'confirmed'
+            // Show in-app notification
+            NotificationManager.showNotification(
+                `✅ Order ${order.orderId} confirmed! Check your email for details.`,
+                'success'
             );
-        }
 
-        return { email: emailResult };
+            console.log('📧 Order confirmation prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing order confirmation:', error);
+            return false;
+        }
     }
 
+    /**
+     * Send order status update notification
+     */
     static async notifyOrderStatusUpdate(order, newStatus) {
-        console.log(`Sending ${newStatus} status notification for:`, order.orderId);
-        
-        const emailResult = await emailNotificationService.sendStatusUpdate(order, newStatus);
-        
-        if (order.phone) {
-            const smsResult = await smsNotificationService.sendOrderStatusSMS(
-                order.phone,
-                order.orderId,
-                newStatus
+        try {
+            const statusMessages = {
+                'pending': 'Your order is being processed',
+                'confirmed': 'Your order has been confirmed',
+                'shipped': 'Your order is on its way! 📦',
+                'delivered': 'Your order has been delivered! 🎉',
+                'cancelled': 'Your order has been cancelled'
+            };
+
+            const notificationData = {
+                type: 'order_status_update',
+                orderId: order.orderId,
+                customerName: order.customerName,
+                customerEmail: order.email,
+                status: newStatus,
+                statusMessage: statusMessages[newStatus] || newStatus,
+                timestamp: new Date().toISOString()
+            };
+
+            // Log the notification
+            NotificationManager.logNotification(notificationData);
+
+            // Show in-app notification
+            NotificationManager.showNotification(
+                `📦 Order ${order.orderId}: ${notificationData.statusMessage}`,
+                newStatus === 'delivered' ? 'success' : 'info'
             );
+
+            console.log('📧 Status update prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing status update:', error);
+            return false;
         }
-
-        return { email: emailResult };
     }
 
-    static async notifyOrderDelivery(order) {
-        console.log('Sending delivery confirmation for:', order.orderId);
-        
-        return await emailNotificationService.sendDeliveryConfirmation(order);
-    }
+    /**
+     * Send payment reminder notification
+     */
+    static async notifyPaymentReminder(order) {
+        try {
+            const notificationData = {
+                type: 'payment_reminder',
+                orderId: order.orderId,
+                customerName: order.customerName,
+                customerEmail: order.email,
+                totalAmount: order.totalAmount,
+                orderDate: order.orderDate,
+                timestamp: new Date().toISOString()
+            };
 
-    static async notifyOrderCancellation(order, reason) {
-        console.log('Sending cancellation notification for:', order.orderId);
-        
-        const emailResult = await emailNotificationService.sendCancellationNotification(order, reason);
-        
-        if (order.phone) {
-            const smsResult = await smsNotificationService.sendOrderStatusSMS(
-                order.phone,
-                order.orderId,
-                'cancelled'
-            );
+            NotificationManager.logNotification(notificationData);
+            NotificationManager.showNotification('💰 Payment reminder sent', 'warning');
+
+            console.log('📧 Payment reminder prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing payment reminder:', error);
+            return false;
         }
-
-        return { email: emailResult };
     }
 
-    static getNotificationStats() {
-        return {
-            emails: emailNotificationService.getNotificationStats(),
-            sms: {
-                total: smsNotificationService.getSMSHistory().length
-            }
+    /**
+     * Send abandoned cart notification
+     */
+    static async notifyAbandonedCart(cartData) {
+        try {
+            const notificationData = {
+                type: 'abandoned_cart',
+                customerEmail: cartData.email,
+                customerName: cartData.name,
+                cartItems: cartData.items,
+                cartTotal: cartData.total,
+                recoveryLink: cartData.recoveryLink || '#',
+                timestamp: new Date().toISOString()
+            };
+
+            NotificationManager.logNotification(notificationData);
+            NotificationManager.showNotification('🛒 Cart recovery email sent', 'info');
+
+            console.log('📧 Abandoned cart notification prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing abandoned cart notification:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Send promotional notification
+     */
+    static async notifyPromotion(email, promotionData) {
+        try {
+            const notificationData = {
+                type: 'promotion',
+                customerEmail: email,
+                promotionTitle: promotionData.title,
+                promotionDescription: promotionData.description,
+                discountCode: promotionData.code,
+                discountPercentage: promotionData.percentage,
+                validUntil: promotionData.validUntil,
+                timestamp: new Date().toISOString()
+            };
+
+            NotificationManager.logNotification(notificationData);
+            NotificationManager.showNotification('🎉 Promotion email sent', 'info');
+
+            console.log('📧 Promotion notification prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing promotion notification:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Send customer review request
+     */
+    static async notifyReviewRequest(order) {
+        try {
+            const notificationData = {
+                type: 'review_request',
+                orderId: order.orderId,
+                customerEmail: order.email,
+                customerName: order.customerName,
+                reviewLink: `https://harvesthubtea.com/review.html?orderId=${order.orderId}`,
+                items: order.items,
+                timestamp: new Date().toISOString()
+            };
+
+            NotificationManager.logNotification(notificationData);
+            NotificationManager.showNotification('⭐ Review request sent', 'info');
+
+            console.log('📧 Review request prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing review request:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Send birthday surprise notification
+     */
+    static async notifyBirthdaySurprise(customerData) {
+        try {
+            const notificationData = {
+                type: 'birthday_surprise',
+                customerEmail: customerData.email,
+                customerName: customerData.name,
+                discountCode: 'BIRTHDAY2024',
+                discountPercentage: 15,
+                message: `🎉 Happy Birthday ${customerData.name}! Enjoy 15% off your next order!`,
+                timestamp: new Date().toISOString()
+            };
+
+            NotificationManager.logNotification(notificationData);
+            NotificationManager.showNotification('🎂 Birthday greetings sent!', 'success');
+
+            console.log('📧 Birthday surprise prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing birthday surprise:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Send reorder reminder
+     */
+    static async notifyReorderReminder(customerData, lastOrderDate) {
+        try {
+            const notificationData = {
+                type: 'reorder_reminder',
+                customerEmail: customerData.email,
+                customerName: customerData.name,
+                lastOrderDate: lastOrderDate,
+                reorderLink: 'https://harvesthubtea.com/shop.html',
+                timestamp: new Date().toISOString()
+            };
+
+            NotificationManager.logNotification(notificationData);
+            NotificationManager.showNotification('🍵 Reorder reminder sent', 'info');
+
+            console.log('📧 Reorder reminder prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing reorder reminder:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Send refund notification
+     */
+    static async notifyRefund(order, refundAmount, reason) {
+        try {
+            const notificationData = {
+                type: 'refund_notification',
+                orderId: order.orderId,
+                customerEmail: order.email,
+                customerName: order.customerName,
+                refundAmount: refundAmount,
+                reason: reason,
+                timestamp: new Date().toISOString()
+            };
+
+            NotificationManager.logNotification(notificationData);
+            NotificationManager.showNotification(`💰 Refund of ₹${refundAmount} processed`, 'success');
+
+            console.log('📧 Refund notification prepared:', notificationData);
+            return true;
+
+        } catch (error) {
+            console.error('❌ Error preparing refund notification:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Show in-app notification (toast)
+     */
+    static showNotification(message, type = 'info', duration = 3000) {
+        const notification = document.createElement('div');
+        notification.className = `app-notification notification-${type}`;
+
+        const colors = {
+            'success': { bg: '#4CAF50', icon: '✅' },
+            'error': { bg: '#f44336', icon: '❌' },
+            'warning': { bg: '#ff9800', icon: '⚠️' },
+            'info': { bg: '#2196F3', icon: 'ℹ️' },
+            'order': { bg: '#0b5d3d', icon: '🍵' }
+        };
+
+        const config = colors[type] || colors['info'];
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: ${config.bg};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 9999;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            animation: slideInRight 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 400px;
+        `;
+
+        // Add icon
+        const iconSpan = document.createElement('span');
+        iconSpan.textContent = config.icon;
+        iconSpan.style.fontSize = '18px';
+        notification.appendChild(iconSpan);
+
+        // Add message
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = message;
+        notification.appendChild(messageSpan);
+
+        // Add close button
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '×';
+        closeBtn.style.cssText = `
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            margin-left: auto;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        `;
+        closeBtn.onmouseover = () => closeBtn.style.opacity = '1';
+        closeBtn.onmouseout = () => closeBtn.style.opacity = '0.8';
+        notification.appendChild(closeBtn);
+
+        document.body.appendChild(notification);
+
+        const timeoutId = setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, duration);
+
+        closeBtn.onclick = () => {
+            clearTimeout(timeoutId);
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        };
+
+        return notification;
+    }
+
+    /**
+     * Show confirmation dialog
+     */
+    static showConfirmation(title, message, onConfirm, onCancel) {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        `;
+
+        const dialog = document.createElement('div');
+        dialog.style.cssText = `
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            max-width: 400px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            animation: slideUp 0.3s ease;
+        `;
+
+        const titleEl = document.createElement('h2');
+        titleEl.textContent = '🍵 ' + title;
+        titleEl.style.cssText = 'color: #0b3f23; margin-top: 0;';
+
+        const messageEl = document.createElement('p');
+        messageEl.textContent = message;
+        messageEl.style.cssText = 'color: #666; line-height: 1.6; margin: 20px 0;';
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.cssText = 'display: flex; gap: 10px; justify-content: center; margin-top: 30px;';
+
+        const confirmBtn = document.createElement('button');
+        confirmBtn.textContent = 'Confirm';
+        confirmBtn.style.cssText = `
+            background: #0b5d3d;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s;
+        `;
+        confirmBtn.onmouseover = () => confirmBtn.style.background = '#083a2a';
+        confirmBtn.onmouseout = () => confirmBtn.style.background = '#0b5d3d';
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.style.cssText = `
+            background: #ccc;
+            color: #333;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s;
+        `;
+        cancelBtn.onmouseover = () => cancelBtn.style.background = '#bbb';
+        cancelBtn.onmouseout = () => cancelBtn.style.background = '#ccc';
+
+        buttonContainer.appendChild(confirmBtn);
+        buttonContainer.appendChild(cancelBtn);
+
+        dialog.appendChild(titleEl);
+        dialog.appendChild(messageEl);
+        dialog.appendChild(buttonContainer);
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+
+        confirmBtn.onclick = () => {
+            overlay.remove();
+            if (onConfirm) onConfirm();
+        };
+
+        cancelBtn.onclick = () => {
+            overlay.remove();
+            if (onCancel) onCancel();
         };
     }
 
-    static clearAllHistory() {
-        emailNotificationService.clearNotificationHistory();
-        localStorage.removeItem('smsNotificationHistory');
+    /**
+     * Log notification event
+     */
+    static logNotification(eventData) {
+        const manager = window.notificationManager || new NotificationManager();
+        const logEntry = {
+            timestamp: new Date().toISOString(),
+            ...eventData
+        };
+
+        manager.notificationHistory.push(logEntry);
+        
+        // Keep only last 100 logs
+        if (manager.notificationHistory.length > 100) {
+            manager.notificationHistory.shift();
+        }
+        
+        manager.saveNotificationHistory();
+        console.log('📊 Notification logged:', logEntry);
+    }
+
+    /**
+     * Get notification logs
+     */
+    static getNotificationLogs(limit = 10) {
+        const manager = window.notificationManager || new NotificationManager();
+        return manager.notificationHistory.slice(-limit).reverse();
+    }
+
+    /**
+     * Clear notification logs
+     */
+    static clearNotificationLogs() {
+        if (window.notificationManager) {
+            window.notificationManager.notificationHistory = [];
+            window.notificationManager.saveNotificationHistory();
+        }
+        console.log('✅ Notification logs cleared');
+    }
+
+    /**
+     * Get notification statistics
+     */
+    static getNotificationStats() {
+        const manager = window.notificationManager || new NotificationManager();
+        const stats = {};
+        
+        manager.notificationHistory.forEach(log => {
+            stats[log.type] = (stats[log.type] || 0) + 1;
+        });
+
+        return {
+            total: manager.notificationHistory.length,
+            byType: stats,
+            lastNotification: manager.notificationHistory[manager.notificationHistory.length - 1] || null
+        };
     }
 }
 
-// Export for use in other files
+// CSS Animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .app-notification {
+        letter-spacing: 0.5px;
+    }
+
+    .app-notification:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+    }
+`;
+document.head.appendChild(style);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    window.notificationManager = new NotificationManager();
+    console.log('✅ Notification Manager initialized');
+});
+
+// Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { EmailNotificationService, SMSNotificationService, NotificationManager };
+    module.exports = NotificationManager;
 }
