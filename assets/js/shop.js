@@ -106,7 +106,7 @@ class ShoppingCart {
 class OrderManager {
     constructor() {
         this.orders = this.loadOrders();
-        this.googleAppsScriptUrl = 'https://script.google.com/macros/d/YOUR_GOOGLE_APPS_SCRIPT_DEPLOYMENT_ID/usercallable';
+        this.googleAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbzr72ItVbHYKJtjlAQf6JK5v8wD2qN4EKhO8Bkw_kHReejJWL3nQgsel_1VUh_g2HkRaA/exec';
         this.adminEmail = 'harvesthubassamtea@gmail.com';
     }
 
