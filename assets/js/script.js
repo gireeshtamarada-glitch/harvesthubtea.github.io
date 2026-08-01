@@ -217,11 +217,14 @@ function saveOrder(orderData) {
 
     fetch("https://script.google.com/macros/s/AKfycbyaeFFZhV3VcXFIUdD3GsiRwWyLN9BuVDU5dZxdG-aIFpfEIwCgEpvp1QZnx_Zvp8T7/exec", {
         method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "text/plain"
+        },
         body: JSON.stringify(orderData)
     })
-    .then(response => response.text())
-    .then(data => {
-        console.log("Order saved:", data);
+    .then(() => {
+        console.log("Order sent successfully");
     })
     .catch(error => {
         console.error("Error saving order:", error);
