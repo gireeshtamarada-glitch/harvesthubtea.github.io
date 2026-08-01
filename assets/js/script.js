@@ -214,9 +214,19 @@ function placeOrder() {
 
 // Save order to localStorage
 function saveOrder(orderData) {
-    let orders = JSON.parse(localStorage.getItem('harvestHubOrders')) || [];
-    orders.push(orderData);
-    localStorage.setItem('harvestHubOrders', JSON.stringify(orders));
+
+    fetch("https://script.google.com/macros/s/AKfycbyaeFFZhV3VcXFIUdD3GsiRwWyLN9BuVDU5dZxdG-aIFpfEIwCgEpvp1QZnx_Zvp8T7/exec", {
+        method: "POST",
+        body: JSON.stringify(orderData)
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log("Order saved:", data);
+    })
+    .catch(error => {
+        console.error("Error saving order:", error);
+    });
+
 }
 
 // Generate order ID
