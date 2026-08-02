@@ -244,23 +244,24 @@ class CheckoutHandler {
 
             // Send to Google Apps Script
             const response = await fetch(this.orderManager.googleAppsScriptUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
+    method: 'POST',
+    headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+    },
+    body: JSON.stringify(payload)
+});
 
-            console.log('Order saved to Google Sheets successfully');
-            return true;
+const result = await response.json();
 
-        } catch (error) {
-            console.error('Error saving to Google Sheets:', error);
-            // Don't fail checkout if Google Sheets save fails
-            return false;
-        }
-    }
+console.log('Google Apps Script Response:', result);
+
+if (result.success) {
+    console.log('Order saved to Google Sheets successfully');
+    return true;
+} else {
+    console.error('Google Sheet Error:', result.message);
+    return false;
+}
 
     async sendAdminNotification(order) {
         try {
