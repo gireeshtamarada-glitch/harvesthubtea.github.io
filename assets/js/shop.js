@@ -241,7 +241,8 @@ class CheckoutHandler {
                 paymentMethod: order.paymentMethod,
                 notes: order.notes
             };
-
+console.log("Payload:", payload);
+            
             // Send to Google Apps Script
             const response = await fetch(this.orderManager.googleAppsScriptUrl, {
     method: 'POST',
