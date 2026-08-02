@@ -37,7 +37,8 @@ function setupEventListeners() {
 }
 
 // Search order by Order ID
-function searchOrder() {
+async function searchOrder() {
+
     const orderId = document.getElementById('orderIdInput').value.trim();
 
     if (!orderId) {
@@ -45,13 +46,50 @@ function searchOrder() {
         return;
     }
 
-    const order = allOrders.find(o => o.orderId && o.orderId.toUpperCase() === orderId.toUpperCase());
+    try {
 
-    if (order) {
-        displayOrderStatus(order);
-    } else {
-        showError(`No order found with ID: ${orderId}`);
+        const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbwOs_qA3dnPsGSzgDgAKSaoJAczuKjkCAl418zbnsAiFYA8SHymaJ1iz2rSOmognhis/exec?orderId=" + encodeURIComponent(orderId)
+        );
+
+        const result = await response.json();
+
+        if (result.success) {
+
+            displayOrderStatus({
+                orderId: result.order.orderId,
+                customerName: result.order.customerName,
+                email: result.order.email,
+                phone: result.order.phone,
+                address: result.order.address,
+                city: "",
+                state: "",
+                pincode: "",
+                orderDate: result.order.date,
+                totalAmount: result.order.amount,
+                status: result.order.status,
+                items: [
+                    {
+                        name: result.order.product,
+                        quantity: result.order.quantity,
+                        price: result.order.amount
+                    }
+                ]
+            });
+
+        } else {
+
+            showError(result.message);
+
+        }
+
+    } catch (err) {
+
+        console.error(err);
+        showError("Unable to connect to the server.");
+
     }
+
 }
 
 // Search order by Email
