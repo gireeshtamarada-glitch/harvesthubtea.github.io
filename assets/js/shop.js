@@ -181,6 +181,7 @@ class CheckoutHandler {
     }
 
     async processCheckout(formData) {
+        console.log("SHOP.JS processCheckout called");
         try {
             // Validate form data
             if (!this.validateCheckoutForm(formData)) {
