@@ -176,6 +176,8 @@ function openCheckout() {
 
 // Place order
 function placeOrder() {
+    console.log("SCRIPT.JS placeOrder called");
+
     const form = document.getElementById('checkoutForm');
     const formData = new FormData(form);
 
