@@ -225,6 +225,7 @@ function placeOrder() {
 
 // Save order to localStorage
 function saveOrder(orderData) {
+    console.log("Order Data:", orderData);
 
     fetch("https://script.google.com/macros/s/AKfycbzEeoGBMHJgHkgN4AAx7viPtVUOCUSeyDdE8n7x1Ta-DkRsxOi2pQ9KSJ38M0a7iwBl/exec", {
         method: "POST",
