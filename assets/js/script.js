@@ -188,11 +188,17 @@ function placeOrder() {
     city: formData.get('city'),
     state: formData.get('state'),
     pincode: formData.get('pincode'),
-    items: cart,
+
+    items: JSON.stringify(cart),
+
     totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+
     orderDate: new Date().toLocaleString("en-IN"),
+
     status: "Pending",
+
     paymentMethod: formData.get('paymentMethod'),
+
     notes: ""
 };
 
