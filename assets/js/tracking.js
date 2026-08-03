@@ -49,8 +49,8 @@ async function searchOrder() {
     try {
 
         const response = await fetch(
-            "https://script.google.com/macros/s/AKfycbwOs_qA3dnPsGSzgDgAKSaoJAczuKjkCAl418zbnsAiFYA8SHymaJ1iz2rSOmognhis/exec?orderId=" + encodeURIComponent(orderId)
-        );
+             "https://script.google.com/macros/s/AKfycbzEeoGBMHJgHkgN4AAx7viPtVUOCUSeyDdE8n7x1Ta-DkRsxOi2pQ9KSJ38M0a7iwBl/exec?orderId=" + encodeURIComponent(orderId)
+);
 
         const result = await response.json();
 
