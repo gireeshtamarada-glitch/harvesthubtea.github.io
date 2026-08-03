@@ -224,7 +224,7 @@ function placeOrder() {
 // Save order to localStorage
 function saveOrder(orderData) {
 
-    fetch("https://script.google.com/macros/s/AKfycbyaeFFZhV3VcXFIUdD3GsiRwWyLN9BuVDU5dZxdG-aIFpfEIwCgEpvp1QZnx_Zvp8T7/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbzEeoGBMHJgHkgN4AAx7viPtVUOCUSeyDdE8n7x1Ta-DkRsxOi2pQ9KSJ38M0a7iwBl/exec", {
         method: "POST",
         mode: "no-cors",
         headers: {
