@@ -179,19 +179,22 @@ function placeOrder() {
     const form = document.getElementById('checkoutForm');
     const formData = new FormData(form);
 
-    const orderData = {
-        customerName: formData.get('name'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        address: formData.get('address'),
-        city: formData.get('city'),
-        state: formData.get('state'),
-        pincode: formData.get('pincode'),
-        paymentMethod: formData.get('paymentMethod'),
-        items: cart,
-        totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        orderDate: new Date().toISOString()
-    };
+   const orderData = {
+    orderId: generateOrderId(),
+    customerName: formData.get('name'),
+    email: formData.get('email'),
+    phone: formData.get('phone'),
+    address: formData.get('address'),
+    city: formData.get('city'),
+    state: formData.get('state'),
+    pincode: formData.get('pincode'),
+    items: cart,
+    totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+    orderDate: new Date().toLocaleString("en-IN"),
+    status: "Pending",
+    paymentMethod: formData.get('paymentMethod'),
+    notes: ""
+};
 
     // Save order to localStorage (in a real app, this would be sent to a server)
     saveOrder(orderData);
@@ -221,7 +224,10 @@ function saveOrder(orderData) {
         headers: {
             "Content-Type": "text/plain"
         },
-        body: JSON.stringify(orderData)
+        body: JSON.stringify({
+            ...orderData,
+            items: JSON.stringify(orderData.items)
+        })
     })
     .then(() => {
         console.log("Order sent successfully");
@@ -239,14 +245,13 @@ function generateOrderId() {
 
 // Show order confirmation
 function showOrderConfirmation(orderData) {
-    const orderId = 'HH' + Date.now() + Math.random().toString(36).substr(2, 9).toUpperCase();
     
     const confirmationHTML = `
         <div class="modal show" style="display: flex;">
             <div class="modal-content">
                 <h2 style="color: #0b5d3d; text-align: center;">✓ Order Confirmed!</h2>
                 <div style="background: #f0f8f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                    <p><strong>Order ID:</strong> ${orderId}</p>
+                    <p><strong>Order ID:</strong> ${orderData.orderId}</p>
                     <p><strong>Customer Name:</strong> ${orderData.customerName}</p>
                     <p><strong>Email:</strong> ${orderData.email}</p>
                     <p><strong>Delivery Address:</strong> ${orderData.address}, ${orderData.city}, ${orderData.state} - ${orderData.pincode}</p>
