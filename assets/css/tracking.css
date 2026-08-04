@@ -285,37 +285,25 @@ body {
     box-shadow: 0 0 0 3px #e0e0e0;
 }
 
-.timeline-dot.pending-dot {
+.timeline-item.active .pending-dot {
     background: #c89b3c;
     box-shadow: 0 0 0 3px #fff, 0 0 0 6px #c89b3c;
 }
 
-.timeline-dot.confirmed-dot {
+.timeline-item.active .confirmed-dot {
     background: #4CAF50;
     box-shadow: 0 0 0 3px #fff, 0 0 0 6px #4CAF50;
 }
 
-.timeline-dot.shipped-dot {
+.timeline-item.active .shipped-dot {
     background: #2196F3;
     box-shadow: 0 0 0 3px #fff, 0 0 0 6px #2196F3;
 }
 
-.timeline-dot.delivered-dot {
+.timeline-item.active .delivered-dot {
     background: #0b5d3d;
     box-shadow: 0 0 0 3px #fff, 0 0 0 6px #0b5d3d;
 }
-
-.timeline-content h4 {
-    color: #0b3f23;
-    margin-bottom: 5px;
-    font-size: 16px;
-}
-
-.timeline-content p {
-    color: #999;
-    font-size: 14px;
-}
-
 /* ================= DELIVERY INFO ================= */
 
 .delivery-info {
