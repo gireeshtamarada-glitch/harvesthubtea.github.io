@@ -201,8 +201,9 @@ function updateTimeline(status, orderDate) {
 
     // Reset all timeline items
     document.querySelectorAll('.timeline-item').forEach(item => {
-        item.style.opacity = '0.5';
-    });
+    item.style.opacity = '0.5';
+    item.classList.remove('active');
+});
 
     // Activate timeline items up to current status
     for (let i = 0; i <= statusIndex; i++) {
