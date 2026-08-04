@@ -210,6 +210,7 @@ function updateTimeline(status, orderDate) {
         const timelineItem = document.getElementById(`timeline-${statuses[i]}`);
         if (timelineItem) {
             timelineItem.style.opacity = '1';
+            timelineItem.classList.add('active');
 
             // Add timestamp
             let timeElement = document.getElementById(`time-${statuses[i]}`);
