@@ -194,7 +194,7 @@ function displayOrderItems(items) {
 
 // Update timeline based on status
 function updateTimeline(status, orderDate) {
-    const statuses = ['pending', 'confirmed', 'shipped', 'delivered'];
+    const statuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
     const statusIndex = statuses.indexOf(status.toLowerCase());
 
     const date = new Date(orderDate);
