@@ -353,14 +353,14 @@ async function updateOrderStatus(index) {
 
     try {
 
-      const response = await fetch(
-    API_URL +
-    "?action=updateStatus" +
-    "&orderId=" + encodeURIComponent(order.orderId) +
-    "&status=" + encodeURIComponent(newStatus)
-);
+        const response = await fetch(
+            API_URL +
+            "?action=updateStatus" +
+            "&orderId=" + encodeURIComponent(order.orderId) +
+            "&status=" + encodeURIComponent(newStatus)
+        );
 
-const result = await response.json();
+        const result = await response.json();
 
         if (result.success) {
 
