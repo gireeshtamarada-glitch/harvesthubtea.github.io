@@ -234,15 +234,23 @@ function viewOrderDetails(index) {
     const date = new Date(order.orderDate).toLocaleDateString('en-IN');
     const time = new Date(order.orderDate).toLocaleTimeString('en-IN');
 
-    let itemsHtml = '';
-    order.items.forEach(item => {
-        itemsHtml += `
-            <li class="order-item">
-                <span>${item.name} × ${item.quantity}</span>
-                <span>₹${item.price * item.quantity}</span>
-            </li>
-        `;
-    });
+    let items = order.items;
+
+if (typeof items === "string") {
+    try {
+        items = JSON.parse(items);
+    } catch (e) {
+        items = [];
+    }
+}
+
+if (!Array.isArray(items)) {
+    items = [];
+}
+
+let itemsHtml = '';
+
+items.forEach(item => {
 
     let html = `
         <div class="detail-section">
