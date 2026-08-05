@@ -353,17 +353,15 @@ async function updateOrderStatus(index) {
 
     try {
 
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                action: "updateStatus",
-                orderId: order.orderId,
-                status: newStatus
-            })
-        });
+       const response = await fetch(API_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+        action: "updateStatus",
+        orderId: order.orderId,
+        status: newStatus
+    })
+});
 
         const result = await response.json();
 
