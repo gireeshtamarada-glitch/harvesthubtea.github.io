@@ -23,7 +23,6 @@ async function loadOrders() {
     try {
 
         const response = await fetch(API_URL);
-
         const result = await response.json();
 
         if (result.success) {
@@ -40,16 +39,23 @@ async function loadOrders() {
                 pincode: order["Pincode"],
 
                 items: (() => {
-    try {
-        if (!order["Items"]) return [];
-        return typeof order["Items"] === "string"
-            ? JSON.parse(order["Items"])
-            : order["Items"];
-    } catch (e) {
-        console.warn("Invalid Items JSON:", order["Items"]);
-        return [];
-    }
-})(),
+                    try {
+                        if (!order["Items"]) return [];
+                        return typeof order["Items"] === "string"
+                            ? JSON.parse(order["Items"])
+                            : order["Items"];
+                    } catch (e) {
+                        console.warn("Invalid Items JSON:", order["Items"]);
+                        return [];
+                    }
+                })(),
+
+                totalAmount: Number(order["Total Amount"]) || 0,
+                orderDate: order["Order Date"],
+                status: (order["Status"] || "pending").toLowerCase(),
+                paymentMethod: order["Payment Method"]
+
+            }));
 
         } else {
 
@@ -63,7 +69,6 @@ async function loadOrders() {
     } catch (error) {
 
         console.error(error);
-
         alert("Unable to load orders from Google Sheets.");
 
     }
