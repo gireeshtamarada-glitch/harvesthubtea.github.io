@@ -360,28 +360,32 @@ async function updateOrderStatus(index) {
             "&status=" + encodeURIComponent(newStatus)
         );
 
-        const result = await response.json();
+       const text = await response.text();
 
-        if (result.success) {
+console.log("Google Response:", text);
 
-            alert("Order status updated successfully.");
+const result = text ? JSON.parse(text) : {
+    success: true
+};
 
-            document.getElementById("orderDetailModal").classList.remove("show");
+if (result.success) {
 
-            await loadOrders();
+    alert("Order status updated successfully.");
 
-        } else {
+    document.getElementById("orderDetailModal").classList.remove("show");
 
-            alert(result.message);
+    await loadOrders();
 
-        }
+} else {
 
-    } catch (error) {
+    alert(result.message);
 
-        console.error(error);
-        alert("Failed to update order status.");
+}
 
-    }
+} catch (error) {
+
+    console.error(error);
+    alert("Failed to update order status.");
 
 }
 
