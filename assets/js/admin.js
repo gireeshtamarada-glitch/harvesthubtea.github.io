@@ -310,13 +310,48 @@ function viewOrderDetails(index) {
 }
 
 // Update Order Status
-function updateOrderStatus(index) {
-    const newStatus = document.getElementById('orderStatus').value;
-    allOrders[index].status = newStatus;
-    saveOrders();
-    alert('Order status updated to: ' + newStatus);
-    document.getElementById('orderDetailModal').classList.remove('show');
-    displayOrders();
+async function updateOrderStatus(index) {
+
+    const newStatus = document.getElementById("orderStatus").value;
+    const order = allOrders[index];
+
+    try {
+
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                action: "updateStatus",
+                orderId: order.orderId,
+                status: newStatus
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+
+            alert("Order status updated successfully.");
+
+            document.getElementById("orderDetailModal").classList.remove("show");
+
+            await loadOrders();
+
+        } else {
+
+            alert(result.message);
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Failed to update order status.");
+
+    }
+
 }
 
 // Filter Orders
