@@ -3,12 +3,16 @@
 let allOrders = [];
 
 // Initialize dashboard on page load
-document.addEventListener('DOMContentLoaded', function() {
-    loadOrders();
+document.addEventListener('DOMContentLoaded', async function () {
+
+    await loadOrders();
+
     setupMenuListeners();
+
     updateDateTime();
-    displayDashboard();
+
     setInterval(updateDateTime, 1000);
+
 });
 
 // ******** GOOGLE SHEETS ********
