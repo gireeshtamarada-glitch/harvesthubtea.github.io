@@ -39,16 +39,17 @@ async function loadOrders() {
                 state: order["State"],
                 pincode: order["Pincode"],
 
-                items: typeof order["Items"] === "string"
-                    ? JSON.parse(order["Items"])
-                    : order["Items"],
-
-                totalAmount: Number(order["Total Amount"]),
-                orderDate: order["Order Date"],
-                status: (order["Status"] || "pending").toLowerCase(),
-                paymentMethod: order["Payment Method"]
-
-            }));
+                items: (() => {
+    try {
+        if (!order["Items"]) return [];
+        return typeof order["Items"] === "string"
+            ? JSON.parse(order["Items"])
+            : order["Items"];
+    } catch (e) {
+        console.warn("Invalid Items JSON:", order["Items"]);
+        return [];
+    }
+})(),
 
         } else {
 
