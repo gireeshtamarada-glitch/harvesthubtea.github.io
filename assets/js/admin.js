@@ -227,6 +227,7 @@ function displayOrders() {
 
 // View Order Details
 function viewOrderDetails(index) {
+
     const order = allOrders[index];
     const modal = document.getElementById('orderDetailModal');
     const content = document.getElementById('orderDetailContent');
@@ -236,51 +237,64 @@ function viewOrderDetails(index) {
 
     let items = order.items;
 
-if (typeof items === "string") {
-    try {
-        items = JSON.parse(items);
-    } catch (e) {
+    if (typeof items === "string") {
+        try {
+            items = JSON.parse(items);
+        } catch (e) {
+            items = [];
+        }
+    }
+
+    if (!Array.isArray(items)) {
         items = [];
     }
-}
 
-if (!Array.isArray(items)) {
-    items = [];
-}
+    let itemsHtml = '';
 
-let itemsHtml = '';
+    items.forEach(item => {
+        itemsHtml += `
+            <li class="order-item">
+                <span>${item.name || 'Tea Product'} × ${item.quantity || 1}</span>
+                <span>₹${(item.price || 0) * (item.quantity || 1)}</span>
+            </li>
+        `;
+    });
 
-items.forEach(item => {
 
-    let html = `
+    const html = `
+
         <div class="detail-section">
             <div class="detail-label">Order ID</div>
-            <div class="detail-value">${order.orderId || 'HH-' + index}</div>
+            <div class="detail-value">${order.orderId || 'N/A'}</div>
         </div>
+
 
         <div class="detail-section">
             <div class="detail-label">Customer Information</div>
             <div class="detail-value">
-                <p><strong>Name:</strong> ${order.customerName}</p>
-                <p><strong>Email:</strong> ${order.email}</p>
-                <p><strong>Phone:</strong> ${order.phone}</p>
+                <p><strong>Name:</strong> ${order.customerName || ''}</p>
+                <p><strong>Email:</strong> ${order.email || ''}</p>
+                <p><strong>Phone:</strong> ${order.phone || ''}</p>
             </div>
         </div>
+
 
         <div class="detail-section">
             <div class="detail-label">Delivery Address</div>
             <div class="detail-value">
-                <p>${order.address}</p>
-                <p>${order.city}, ${order.state} - ${order.pincode}</p>
+                <p>${order.address || ''}</p>
+                <p>${order.city || ''}, ${order.state || ''} - ${order.pincode || ''}</p>
             </div>
         </div>
+
 
         <div class="detail-section">
             <div class="detail-label">Order Items</div>
             <ul class="order-items">
-                ${itemsHtml}
+                ${itemsHtml || '<li>No item details available</li>'}
             </ul>
         </div>
+
 
         <div class="detail-section">
             <div class="detail-label">Payment Details</div>
@@ -290,6 +304,7 @@ items.forEach(item => {
             </div>
         </div>
 
+
         <div class="detail-section">
             <div class="detail-label">Order Date & Time</div>
             <div class="detail-value">
@@ -297,24 +312,37 @@ items.forEach(item => {
             </div>
         </div>
 
+
         <div class="detail-section">
             <div class="detail-label">Order Status</div>
+
             <div class="status-selector">
-                <select id="orderStatus" value="${order.status || 'pending'}">
+
+                <select id="orderStatus">
                     <option value="pending">Pending</option>
                     <option value="confirmed">Confirmed</option>
                     <option value="shipped">Shipped</option>
                     <option value="delivered">Delivered</option>
                     <option value="cancelled">Cancelled</option>
                 </select>
-                <button class="btn-update-status" onclick="updateOrderStatus(${index})">Update</button>
+
+                <button class="btn-update-status" onclick="updateOrderStatus(${index})">
+                    Update
+                </button>
+
             </div>
+
         </div>
+
     `;
 
+
     content.innerHTML = html;
+
     document.getElementById('orderStatus').value = order.status || 'pending';
+
     modal.classList.add('show');
+
 }
 
 // Update Order Status
