@@ -11,14 +11,58 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(updateDateTime, 1000);
 });
 
-// Load orders from localStorage
-function loadOrders() {
-    const savedOrders = localStorage.getItem('harvestHubOrders');
-    if (savedOrders) {
-        allOrders = JSON.parse(savedOrders);
-    } else {
-        allOrders = [];
+// ******** GOOGLE SHEETS ********
+const API_URL = "https://script.google.com/macros/s/AKfycbzEeoGBMHJgHkgN4AAx7viPtVUOCUSeyDdE8n7x1Ta-DkRsxOi2pQ9KSJ38M0a7iwBl/exec";
+
+async function loadOrders() {
+
+    try {
+
+        const response = await fetch(API_URL);
+
+        const result = await response.json();
+
+        if (result.success) {
+
+            allOrders = result.orders.map(order => ({
+
+                orderId: order["Order ID"],
+                customerName: order["Customer Name"],
+                email: order["Email"],
+                phone: order["Phone"],
+                address: order["Address"],
+                city: order["City"],
+                state: order["State"],
+                pincode: order["Pincode"],
+
+                items: typeof order["Items"] === "string"
+                    ? JSON.parse(order["Items"])
+                    : order["Items"],
+
+                totalAmount: Number(order["Total Amount"]),
+                orderDate: order["Order Date"],
+                status: (order["Status"] || "pending").toLowerCase(),
+                paymentMethod: order["Payment Method"]
+
+            }));
+
+        } else {
+
+            allOrders = [];
+
+        }
+
+        displayDashboard();
+        displayOrders();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Unable to load orders from Google Sheets.");
+
     }
+
 }
 
 // Update date and time
